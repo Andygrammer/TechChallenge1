@@ -1,8 +1,12 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager navManager
 
-<MudThemeProvider />
+
 <div class="page">
-    <AppHeader />
+    @if(!navManager.Uri.ToUpper().Contains("/LOGIN"))
+    {
+        <AppHeader />
+    }
 
     <main>
         @Body
@@ -10,3 +14,5 @@
 
     <AppFooter />
 </div>
+
+
