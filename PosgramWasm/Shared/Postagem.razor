@@ -1,0 +1,83 @@
+﻿@using static PosgramWasm.Pages.Home;
+@inherits LayoutComponentBase
+
+@foreach (var item in posts)
+{
+    <div class="container">
+        <div class="col-9">
+            <div class="card">
+                <div class="top">
+                    <div class="userDetails">
+                        <div class="profilepic">
+                            <div class="profile_img">
+                                <div class="image">
+                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                                         alt="img8">
+                                </div>
+                            </div>
+                        </div>
+                        <h3>
+                            @item.Autor
+                            <br>
+                        </h3>
+                    </div>
+
+
+                </div>
+
+                <div class="imgBx">
+                    <img src="@item.Imagem"
+                         alt="post-1" class="cover">
+                </div>
+
+                <div class="bottom">
+                    <div class="actionBtns">
+                        <div class="left">
+                            <span class="heart">
+                                <span>
+                                    <svg aria-label="Like" color="#262626" fill="#262626" height="24" role="img"
+                                         viewBox="0 0 48 48" width="24">
+
+                                        <path d="M34.6 6.1c5.7 0 10.4 5.2 10.4
+                                                11.5 0 6.8-5.9 11-11.5 16S25 41.3 24
+                                                41.9c-1.1-.7-4.7-4-9.5-8.3-5.7-5-11.5-9.2-11.5-16C3
+                                                11.3 7.7 6.1 13.4 6.1c4.2 0 6.5 2 8.1 4.3
+                                                1.9 2.6 2.2 3.9 2.5 3.9.3 0 .6-1.3 2.5-3.9
+                                                1.6-2.3 3.9-4.3 8.1-4.3m0-3c-4.5 0-7.9
+                                                1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1
+                                                0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3
+                                                1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3
+                                                1.1.5 1.6.5.6 0 1.1-.2 1.6-.5 1-.6 2.8-2.2
+                                                7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6
+                                                48 25 48 17.6c0-8-6-14.5-13.4-14.5z">
+                                        </path>
+                                    </svg>
+                                </span>
+                            </span>
+                            <svg aria-label="Share Post" class="_8-yf5 " color="#262626" fill="#262626" height="24"
+                                 role="img" viewBox="0 0 16 16" width="24">
+                                <path d="M10.934 5.175l-4.95 2.522a3.036 3.036 0 0 1 0 .606l4.95 2.522a3 3 0 1 1-.908 1.782L5.13 10.112a3 3 0 1 1 0-4.225l4.896-2.494a3 3 0 1 1 .908 1.782zM2 7v2h2V7H2zm10 5v2h2v-2h-2zm0-10v2h2V2h-2z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="right">
+                            <p class="timePost">@item.dataHoraPostagem.Day | @item.dataHoraPostagem.ToString("MMMM") | @item.dataHoraPostagem.Year às @item.dataHoraPostagem.ToString("HH:mm")</p>
+                        </div>
+                    </div>
+
+                    <a href="#">
+                        <p class="legenda">
+                            <b>@item.Autor:</b> @item.Legenda
+                        </p>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public IEnumerable<Postagens>? posts { get; set; }
+}
