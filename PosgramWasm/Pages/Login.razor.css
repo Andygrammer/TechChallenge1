@@ -1,0 +1,60 @@
+﻿
+.loginMainDiv{
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    flex-direction: column;
+    gap: 2vh;
+    height: 100vh;
+}
+
+.Profile-Img-Login {
+    height: 120px;
+    width: 120px;
+    border-radius: 50%;
+    background-color: #f6f6f6;
+    border-color: #353535;
+    border-width: 2px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#tituloDiv {
+    display: flex;
+    flex-direction: row;
+    font-size: 4vh;
+}
+
+#logo-span {
+    font-style: italic;
+    font-weight: 300;
+}
+
+b {
+    font-weight: 800;
+}
+
+.nameInput {
+    outline: 0;
+    border-width: 0 0 2px;
+    width: 65%;
+    font-size: 2em;
+    background-color: #f6f6f6;
+}
+
+.labelIndicacao{
+    margin: 3vh 0 0 0;
+}
+
+input:focus {
+    border-color: green;
+    outline: 1px dotted #000
+}
+
+@media (min-width: 600px) {
+    .nameInput {
+        width: 30%;
+    }
+}
