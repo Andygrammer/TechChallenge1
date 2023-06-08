@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using Infraestrutura;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using PosgramAPI.Data;
 using PosgramAPI.Models.Dto;
@@ -9,10 +10,17 @@ namespace PosgramAPI.Controllers
     [ApiController]
     public class PostagemController : ControllerBase
     {
+        private readonly ApplicationContext _context;
+
+        public PostagemController(ApplicationContext context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
         public ActionResult<IEnumerable<PostagemDto>> GetPostagens()
         {
+            var get = _context;
             return Ok(PostagemStore.listaPostagem);
         }
 
@@ -22,6 +30,7 @@ namespace PosgramAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<PostagemDto> GetPostagem(int id)
         {
+            var get = _context;
             if (id == 0)
             {
                 return BadRequest();
