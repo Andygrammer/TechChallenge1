@@ -12,7 +12,7 @@ env:
   AZURE_APIM_API_ID: APIManagement-postechchallenge1
   AZURE_APIM_APPSERVICEURL: https://wa-back-postechchallenge1.azurewebsites.net
   SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 6.0.0
-  SWASHBUCKLE_DOTNET_CORE_VERSION: 3.1.x
+  SWASHBUCKLE_DOTNET_CORE_VERSION: 6.0.0
   API_IMPORT_SPECIFICATION_PATH: Api\publish\swagger.json
   API_IMPORT_DLL: Api\bin\Release\net6.0\Api.dll
   API_IMPORT_VERSION: v1
