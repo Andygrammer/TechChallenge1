@@ -10,9 +10,9 @@ namespace PosgramAPI.Controllers
     [ApiController]
     public class PostagemController : ControllerBase
     {
-        private readonly ApplicationContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public PostagemController(ApplicationContext context)
+        public PostagemController(ApplicationDbContext context)
         {
             _context = context;
         }
