@@ -19,5 +19,7 @@ namespace Infraestrutura
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Postagem>().HasKey(e => e.Id);
         }
+
+        public DbSet<Postagem> Postagem { get; set; }
     }
 }
