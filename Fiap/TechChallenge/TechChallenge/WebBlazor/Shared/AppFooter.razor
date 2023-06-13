@@ -1,7 +1,14 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager navManager
 
-@if (navManager.Uri.ToUpper().Contains("/NEWPOST"))
+@if (navManager.Uri.ToUpper().Contains("/LOGIN"))
+{
+    <button id="AppFooter">
+        <MudIcon Icon="@Icons.Material.Filled.Check" Title="Favorite" />
+        Entrar
+    </button>
+}
+else if (navManager.Uri.ToUpper().Contains("/NEWPOST"))
 {
     <button id="AppFooter">
         <MudIcon Icon="@Icons.Material.Filled.Check" Title="Favorite" />

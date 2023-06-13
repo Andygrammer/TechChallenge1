@@ -1,9 +1,28 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<Postagem posts="postagens" />
 
-<h1>Hello, world!</h1>
+@code {
+    public class Postagens
+    {
+        public string Autor { get; set; }
+        public string Legenda { get; set; }
+        public string Imagem { get; set; }
+        public DateTime dataHoraPostagem { get; set; }
 
-Welcome to your new app.
+        public Postagens(string autor, string legenda, string imagem)
+        {
+            Autor = autor;
+            Legenda = legenda;
+            Imagem = imagem;
+            dataHoraPostagem = DateTime.Now;
+        }
+    }
+    List<Postagens> postagens = new List<Postagens>();
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    protected override async Task OnInitializedAsync()
+    {
+        postagens.Add(new Postagens("Juliana", "Qualquer coisa ai", "https://plus.unsplash.com/premium_photo-1675019222084-1be97a344202?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=802&q=80"));
+        postagens.Add(new Postagens("Juliana", "Qualquer coisa ai", "https://plus.unsplash.com/premium_photo-1675019222084-1be97a344202?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=802&q=80"));
+    }
+}
