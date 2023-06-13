@@ -24,8 +24,11 @@ namespace Infraestrutura.Migrations
 
             modelBuilder.Entity("Infraestrutura.Models.Postagem", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Autor")
                         .IsRequired()

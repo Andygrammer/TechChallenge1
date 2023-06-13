@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -10,26 +11,19 @@ namespace Infraestrutura.Models
     /// <summary>
     /// 
     /// </summary>
-    [DataContract]
-    public class BaseModel
+    public class Postagem 
     {
         [DataMember]
-        public string Id { get; set; }
-    }
+        [Key]
+        public int Id { get; }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public class Postagem : BaseModel 
-    { 
-        /// <summary>
-        /// Construtor
-        /// </summary>
-        public Postagem() { }
-
+        [Required]
         public string Autor { get; set; }
+        [Required]
         public string Legenda { get; set; }
+        [Required]
         public string Imagem { get; set; }
+        [Required]
         public DateTime DataHora { get; set; }
 
         /// <summary>
