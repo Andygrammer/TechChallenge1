@@ -1,8 +1,10 @@
 ﻿using Infraestrutura;
+using Infraestrutura.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using PosgramAPI.Data;
 using PosgramAPI.Models.Dto;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PosgramAPI.Controllers
 {
@@ -20,7 +22,7 @@ namespace PosgramAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<PostagemDto>> GetPostagens()
         {
-            var get = _context;
+            var get = _context;            
             return Ok(PostagemStore.listaPostagem);
         }
 
@@ -60,6 +62,9 @@ namespace PosgramAPI.Controllers
             postagemDto.Id = PostagemStore.listaPostagem.OrderByDescending(u => u.Id).FirstOrDefault().Id + 1;
 
             PostagemStore.listaPostagem.Add(postagemDto);
+            var criarPostagem = new Postagem("Kaique Gomes", "O Nexusman", "https://www.google.com.br/url?sa=i&url=https%3A%2F%2Fbr.linkedin.com%2Fin%2Fkaique-leonardo-9745b2212&psig=AOvVaw16imgOyOe8W-BJn_4OG5bj&ust=1686760180512000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCMD1u9DVwP8CFQAAAAAdAAAAABAE", DateTime.Now);
+            _context.Postagem.Add(criarPostagem);
+            _context.SaveChanges();
 
             return CreatedAtRoute("GetPostagem", new { id = postagemDto.Id }, postagemDto);
         }
