@@ -17,6 +17,7 @@
     border-width: 2px;
     overflow: hidden;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
 }
@@ -57,4 +58,8 @@ input:focus {
     .nameInput {
         width: 30%;
     }
+}
+
+img {
+    height: 100%;
 }

@@ -1,0 +1,10 @@
+﻿
+.PostagemDiv {
+    flex: 1;
+}
+
+@media (min-width: 600px) {
+    .PostagemDiv {
+        padding: 0 20%;
+    }
+}

@@ -2,29 +2,41 @@
 @inject IJSRuntime JS
 
 <div class="newpostMainDiv">
+
     <img @ref="previewImageElem" />
-    <label for="file-input" class="AddPhoto">
+    <label for="file-input" class="AddPhoto" style="@StyleForNumber()" hidden="@HideLabel">
         <MudIcon Icon="@Icons.Material.Outlined.CameraAlt" Title="Camera" Style="font-size: 4rem;" />
-            Clique para adicionar a Imagem
+        Clique para adicionar a Imagem
         <InputFile @ref="inputFile" type="file" OnChange="@ShowPreview" name="my-image" id="file-input" accept="image/jpeg, image/png" style="display:none" />
     </label>
-    <textarea class="legendaInput" placeholder="Adicione uma legenda" />
+
     
+    <textarea class="legendaInput" placeholder="Adicione uma legenda" />  
 </div>
 
-
+<AppFooter linkText="Postar" linkDestination="/" IconName="@Icons.Material.Filled.Check" />
 
 @code {
 
     private InputFile? inputFile;
     private ElementReference previewImageElem;
     private Lazy<IJSObjectReference> ExampleModule = new();
+    private bool HideLabel { get; set; } = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender) ExampleModule = new(await JS.InvokeAsync<IJSObjectReference>("import", "./InteropFunctions.js"));
     }
 
-    private async Task ShowPreview() => await JS.InvokeVoidAsync("previewImage", inputFile!.Element, previewImageElem);
+    private async Task ShowPreview()
+    {
+        await JS.InvokeVoidAsync("previewImage", inputFile!.Element, previewImageElem);
+        HideLabel = !HideLabel;
+    }
+
+    private string StyleForNumber()
+    {
+        return HideLabel ? "visibility: hidden; height: 0px;" : "visibility: display";
+    }
 
 }
