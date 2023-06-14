@@ -1,18 +1,62 @@
 ﻿@page "/Login"
+@inject IJSRuntime JS
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <div class="loginMainDiv">
     <div id="tituloDiv">
         <b>POS</b><span id="logo-span">GRAM</span>
     </div>
     <div class="Profile-Img-Login">
-        <MudIcon Icon="@Icons.Material.Outlined.CameraAlt" Title="Camera" Style="font-size: 2.5rem;" />
+        <label for="file-input" class="AddPhoto" style="@StyleForNumber()" hidden="@HideLabel">
+            <MudIcon Icon="@Icons.Material.Outlined.CameraAlt" Title="Camera" Style="font-size: 2.5rem;" />
+            <InputFile @ref="inputFile" type="file" OnChange="@ShowPreview" name="my-image" id="file-input" accept="image/jpeg, image/png" style="display:none" />
+        </label>
+        <img @ref="previewImageElem" />
     </div>
     <span class="labelIndicacao">Digite seu nome:</span>
-    <input class="nameInput" type="text" autofocus/>
+    <input class="nameInput" type="text" autofocus value="@Nome"
+           @onchange="@((ChangeEventArgs __e) => Nome = __e?.Value?.ToString())" />
 </div>
 
-
+<button @onclick="SetInfoOnLocalStorage">
+    <AppFooter linkText="Entrar" linkDestination="/" IconName="@Icons.Material.Filled.Check" />
+</button>
 
 @code {
+    private InputFile? inputFile;
+    private ElementReference previewImageElem;
+    private Lazy<IJSObjectReference> ExampleModule = new();
+    private bool HideLabel { get; set; } = false;
+    private long maxFileSize = 10000000;
+    private string Photo64 = "";
+    string Nome { get; set; } = string.Empty;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) ExampleModule = new(await JS.InvokeAsync<IJSObjectReference>("import", "./InteropFunctions.js"));
+    }
+
+    private async Task ShowPreview(InputFileChangeEventArgs e)
+    {
+        HideLabel = !HideLabel;
+        await JS.InvokeVoidAsync("previewImage", inputFile!.Element, previewImageElem);
+
+        using (Stream reader = e.File.OpenReadStream(maxFileSize))
+        {
+            byte[] buffer = new byte[reader.Length];
+            await reader.ReadAsync(buffer, 0, (int)reader.Length);
+            Photo64 = Convert.ToBase64String(buffer);
+        }      
+    }
+
+    private string StyleForNumber()
+    {
+        return HideLabel ? "visibility: hidden;height: 0px;width: 0px;" : "visibility: display";
+    }
+
+    private async Task SetInfoOnLocalStorage()
+    {
+        await localStorage.SetItemAsync("AvatarPhoto", Photo64);
+        await localStorage.SetItemAsync("AvatarName", Nome);
+    }
 }
