@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/ff481da5-9326-4651-9f61-4e08ed30b458/resourceGroups/rg-postechchallenge1/providers/Microsoft.Web/sites/wa-api-postechchallenge1",
+    "appService.deploySubpath": "."
+}
