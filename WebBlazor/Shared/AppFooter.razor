@@ -1,31 +1,22 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager navManager
 
-@if (navManager.Uri.ToUpper().Contains("/LOGIN"))
-{
+<NavLink class="nav-link" href=@LinkDestination>
     <button id="AppFooter">
-        <MudIcon Icon="@Icons.Material.Filled.Check" Title="Favorite" />
-        Entrar
+        <MudIcon Icon=@IconName Title="Favorite" />
+        @LinkText
     </button>
+</NavLink>
+
+@code{
+
+    [Parameter]
+    public string LinkDestination { get; set; }
+
+    [Parameter]
+    public string LinkText { get; set; }  
+
+    [Parameter]
+    public string IconName { get; set; }
 }
-else if (navManager.Uri.ToUpper().Contains("/NEWPOST"))
-{
-    <button id="AppFooter">
-        <MudIcon Icon="@Icons.Material.Filled.Check" Title="Favorite" />
-        Postar
-    </button>
-}
-else if (navManager.Uri.ToUpper().Contains("/POSTING"))
-{
-    <button id="AppFooter">
-        <MudIcon Icon="@Icons.Material.Filled.Timelapse" Title="Favorite" />
-        Postando
-    </button>
-}
-else
-{
-    <button id="AppFooter">
-        <MudIcon Icon="@Icons.Material.Filled.Add" Title="Favorite" />
-        Novo
-    </button>
-}
+

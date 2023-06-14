@@ -1,6 +1,10 @@
 ﻿@page "/"
 
-<Postagem posts="postagens" />
+<div class ="PostagemDiv">
+    <Postagem  posts="postagens" />
+</div>
+
+<AppFooter linkText="Nova" linkDestination="Newpost" IconName="@Icons.Material.Filled.Add"/>
 
 @code {
     public class Postagens
