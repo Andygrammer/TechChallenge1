@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infraestrutura.Models
 {
@@ -24,6 +19,8 @@ namespace Infraestrutura.Models
         [Required]
         public string Imagem { get; set; }
         [Required]
+        public string NomeImagem { get; set; }
+        [Required]
         public DateTime DataHora { get; set; }
 
         /// <summary>
@@ -36,12 +33,14 @@ namespace Infraestrutura.Models
         public Postagem(string autor, 
                         string legenda, 
                         string imagem, 
+                        string nomeImagem,
                         DateTime dataHora)
         {
             Autor = autor;
             Legenda = legenda;
             Imagem = imagem;
             DataHora = dataHora;
+            NomeImagem = nomeImagem;
         }
     }
 }
