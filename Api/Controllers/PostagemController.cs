@@ -31,11 +31,9 @@ namespace PosgramAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PostagemDto>>> GetPostagensAsync()
         {
-            //var get = _context;
 
             IEnumerable<Postagem> PostagemLista = await _dbPostagem.GetAllAsync();
 
-            //return Ok(PostagemStore.listaPostagem);
             return Ok(PostagemLista);
         }
 
@@ -46,8 +44,6 @@ namespace PosgramAPI.Controllers
         public async Task<ActionResult<PostagemDto>> GetPostagem(int id)
         {
             await _blobServices.GetBlob("");
-
-            //var get = _context;
 
             if (id == 0)
             {
