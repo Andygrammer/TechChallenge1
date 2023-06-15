@@ -1,3 +1,6 @@
+using Api;
+using Api.Repository;
+using Api.Repository.IRepository;
 using Infraestrutura;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +17,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSqlConnection"));
 });
+
+builder.Services.AddScoped<IPostagemRepository, PostagemRepository>();
+
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 var app = builder.Build();
 
