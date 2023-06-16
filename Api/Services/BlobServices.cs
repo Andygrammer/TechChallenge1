@@ -1,12 +1,12 @@
 ﻿using Azure.Storage.Blobs;
-using Infraestrutura.Models;
+using PosgramAPI.Models.Dto;
 
 namespace Api.Services
 {
     public interface IBlobServices
     {
         public Task<string> GetBlob(string imageName);
-        public Task CreateBlob(Postagem newPost);
+        public Task<string> CreateBlob(PostagemDto newPost);
         public Task DeleteBlob(string imageName);
     }
 
@@ -23,11 +23,15 @@ namespace Api.Services
             containerClient = blobServiceClient.GetBlobContainerClient("sc-postechchallenge1");
         }
 
-        public async Task CreateBlob(Postagem newPost)
+        public async Task<string> CreateBlob(PostagemDto newPost)
         {
-            BlobClient blobClient = containerClient.GetBlobClient(BuildBlobImagem(newPost));
+            var nomeImagem = BuildBlobImagem(newPost);
+            BlobClient blobClient = containerClient.GetBlobClient(nomeImagem);
             var binaryData = Base64Service.ConvertFromBase64(newPost.Imagem);
             await blobClient.UploadAsync(binaryData, true);
+
+            if (!await blobClient.ExistsAsync()) throw new Exception("Blob was not created");
+            return nomeImagem;
         }
 
         public async Task DeleteBlob(string imageName)
@@ -46,7 +50,7 @@ namespace Api.Services
             return base64String;
         }
             
-        private string BuildBlobImagem(Postagem newPost)
+        private string BuildBlobImagem(PostagemDto newPost)
         {
             var extensionName = Path.GetExtension(newPost.NomeImagem);
             var nomeAutor = newPost.Autor.ToLower().Replace(" ", "-");

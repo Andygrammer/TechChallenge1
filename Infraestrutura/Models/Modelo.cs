@@ -19,8 +19,6 @@ namespace Infraestrutura.Models
         [Required]
         public string Imagem { get; set; }
         [Required]
-        public string NomeImagem { get; set; }
-        [Required]
         public DateTime DataHora { get; set; }
 
         /// <summary>
@@ -32,15 +30,18 @@ namespace Infraestrutura.Models
         /// <param name="dataHora">Data e Hora da Postagem</param>
         public Postagem(string autor, 
                         string legenda, 
-                        string imagem, 
-                        string nomeImagem,
+                        string imagem,
                         DateTime dataHora)
         {
             Autor = autor;
             Legenda = legenda;
             Imagem = imagem;
             DataHora = dataHora;
-            NomeImagem = nomeImagem;
+        }
+
+        public Postagem()
+        {
+
         }
     }
 }
