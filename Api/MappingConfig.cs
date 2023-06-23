@@ -8,7 +8,7 @@ namespace Api
     {
         public MappingConfig()
         {
-
+             
             CreateMap<Postagem, PostagemDto>().ReverseMap();
         }
     }

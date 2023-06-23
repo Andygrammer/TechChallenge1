@@ -20,6 +20,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IPostagemRepository, PostagemRepository>();
 
+builder.Services.AddCors(options => options.AddPolicy("MyPolicy", builder => {
+    builder.AllowAnyMethod();
+    builder.AllowAnyHeader();
+    builder.AllowAnyOrigin();
+}));
+
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 var app = builder.Build();
@@ -36,6 +42,13 @@ if (app.Environment.IsDevelopment())
     //app.UseSwaggerUI();
     
 }
+
+app.UseCors(builder =>
+{
+    builder.AllowAnyMethod();
+    builder.AllowAnyHeader();
+    builder.AllowAnyOrigin();
+});
 
 app.UseHttpsRedirection();
 

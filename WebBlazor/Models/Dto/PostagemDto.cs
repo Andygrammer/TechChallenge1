@@ -1,4 +1,4 @@
-﻿namespace PosgramAPI.Models.Dto
+﻿namespace WebBlazor.Models
 {
     public class PostagemDto
     {

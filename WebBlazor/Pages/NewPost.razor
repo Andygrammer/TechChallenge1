@@ -1,5 +1,9 @@
 ﻿@page "/Newpost"
+@using WebBlazor.Interfaces;
+@using WebBlazor.Models;
 @inject IJSRuntime JS
+@inject IPostagemService PostagemService
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <div class="newpostMainDiv">
 
@@ -11,10 +15,12 @@
     </label>
 
     
-    <textarea class="legendaInput" placeholder="Adicione uma legenda" />  
+    <textarea class="legendaInput" @bind="textAreaValue" placeholder="Adicione uma legenda" />
 </div>
 
-<AppFooter linkText="Postar" linkDestination="/" IconName="@Icons.Material.Filled.Check" />
+<button @onclick="CreatePostagem">
+    <AppFooter linkText="Postar"  linkDestination="/" IconName="@Icons.Material.Filled.Check" />
+</button>
 
 @code {
 
@@ -22,16 +28,28 @@
     private ElementReference previewImageElem;
     private Lazy<IJSObjectReference> ExampleModule = new();
     private bool HideLabel { get; set; } = false;
+    private string textAreaValue = "";
+    private string Photo64 = "";
+    private long maxFileSize = 10000000;
+    private string nameImage = "";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender) ExampleModule = new(await JS.InvokeAsync<IJSObjectReference>("import", "./InteropFunctions.js"));
     }
 
-    private async Task ShowPreview()
+    private async Task ShowPreview(InputFileChangeEventArgs e)
     {
         await JS.InvokeVoidAsync("previewImage", inputFile!.Element, previewImageElem);
         HideLabel = !HideLabel;
+
+        using (Stream reader = e.File.OpenReadStream(maxFileSize))
+        {
+            nameImage = e.File.Name;
+            byte[] buffer = new byte[reader.Length];
+            await reader.ReadAsync(buffer, 0, (int)reader.Length);
+            Photo64 = Convert.ToBase64String(buffer);
+        }
     }
 
     private string StyleForNumber()
@@ -39,4 +57,22 @@
         return HideLabel ? "visibility: hidden; height: 0px;" : "visibility: display";
     }
 
+    public async void CreatePostagem()
+    {
+        var postagem = await MontarPostagemDto();
+
+        await PostagemService.CreatePostagemAsync(postagem);
+    }
+
+    private async Task<PostagemDto> MontarPostagemDto()
+    {
+        PostagemDto postagem = new PostagemDto();
+        postagem.Autor = await localStorage.GetItemAsync<string>("AvatarName");
+        postagem.Imagem = Photo64;
+        postagem.NomeImagem = nameImage;
+        postagem.Legenda = textAreaValue;
+        postagem.DataHora = DateTime.Now;
+        
+        return postagem;
+    }
 }
