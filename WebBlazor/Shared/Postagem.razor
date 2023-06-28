@@ -102,14 +102,18 @@ else
         await GetAvatarPhoto();
     }
 
-    protected override async void OnAfterRender(bool firstRender)
-    {
-        await GetAvatarPhoto();
-    }
+    //protected override async void OnAfterRender(bool firstRender)
+    //{
+    //    await GetAvatarPhoto();
+    //}
 
     private async Task GetAvatarPhoto()
     {
         PhotoBase64 = await localStorage.GetItemAsync<string>("AvatarPhoto");
+        if(string.IsNullOrEmpty(PhotoBase64))
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private async Task DeleteClick(int id)
