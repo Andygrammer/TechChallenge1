@@ -3,14 +3,18 @@
 
 <div id="AppHeader">
     <div id="logo-div">
-        <b>POS</b><span id="logo-span">GRAM</span>
+        <NavLink href="Index">
+            <b>POS</b><span id="logo-span">GRAM</span>
+        </NavLink>
     </div>
-    <div class="Profile-Img"  id="Profile-Header">
-        <img src="data:image/png;base64, @PhotoBase64" />
-    </div>
+    <NavLink href="/">
+        <div class="Profile-Img" id="Profile-Header">
+            <img src="data:image/png;base64, @PhotoBase64" onclick="" />
+        </div>
+    </NavLink>
 </div>
 
-@code{
+@code {
     public string PhotoBase64 { get; set; }
 
     protected override async Task OnInitializedAsync()

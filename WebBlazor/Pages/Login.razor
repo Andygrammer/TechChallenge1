@@ -1,4 +1,4 @@
-﻿@page "/Login"
+﻿@page "/"
 @inject IJSRuntime JS
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
@@ -19,7 +19,7 @@
 </div>
 
 <button @onclick="SetInfoOnLocalStorage">
-    <AppFooter linkText="Entrar" linkDestination="/" IconName="@Icons.Material.Filled.Check" />
+    <AppFooter linkText="Entrar" linkDestination="/Index" IconName="@Icons.Material.Filled.Check" />
 </button>
 
 @code {
