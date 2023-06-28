@@ -1,6 +1,7 @@
 ﻿@page "/"
 @inject IJSRuntime JS
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject NavigationManager NavigationManager
 
 <div class="loginMainDiv">
     <div id="tituloDiv">
@@ -31,6 +32,15 @@
     private string Photo64 = "";
     string Nome { get; set; } = string.Empty;
 
+    protected override async Task OnInitializedAsync()
+    {
+        var localStoragePhoto = await localStorage.GetItemAsync<string>("AvatarPhoto");
+        if (!string.IsNullOrEmpty(localStoragePhoto))
+        {
+            NavigationManager.NavigateTo("/index", forceLoad: true);
+        }
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender) ExampleModule = new(await JS.InvokeAsync<IJSObjectReference>("import", "./InteropFunctions.js"));
@@ -46,7 +56,7 @@
             byte[] buffer = new byte[reader.Length];
             await reader.ReadAsync(buffer, 0, (int)reader.Length);
             Photo64 = Convert.ToBase64String(buffer);
-        }      
+        }
     }
 
     private string StyleForNumber()
