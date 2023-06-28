@@ -6,5 +6,6 @@
         public string BlobEndPoint { get;set; }
         public string ApiBase { get; set; }
         public string WebBase { get; set; }
+        public string TokenAccess { get; set; }
     }
 }

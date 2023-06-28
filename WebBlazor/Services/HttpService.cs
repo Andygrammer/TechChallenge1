@@ -9,7 +9,6 @@ namespace WebBlazor.Services
         private readonly HttpClient _httpClient;
         private readonly string _apiUrl;
 
-
         public HttpService(HttpClient httpClient, IOptions<BaseUrlConfiguration> baseUrlConfiguration)
         {
             _httpClient = httpClient;
@@ -19,7 +18,7 @@ namespace WebBlazor.Services
         public async Task<T> HttpGet<T>(string uri)
             where T : class
         {
-            var result = await _httpClient.GetAsync($"{uri}");
+            var result = await _httpClient.GetAsync($"{_apiUrl}{uri}");
             if (!result.IsSuccessStatusCode)
             {
                 return null;
@@ -31,11 +30,7 @@ namespace WebBlazor.Services
         public async Task HttpDelete<T>(string uri, int id)
             where T : class
         {
-            var result = await _httpClient.DeleteAsync($"{uri}/{id}");
-            if (!result.IsSuccessStatusCode)
-            {
-            }
-
+            await _httpClient.DeleteAsync($"{_apiUrl}/{uri}/{id}");
         }
 
         public async Task<T> HttpPost<T>(string uri, object dataToSend)
@@ -43,7 +38,7 @@ namespace WebBlazor.Services
         {
             var content = ToJson(dataToSend);
 
-            var result = await _httpClient.PostAsync($"{uri}", content);
+            var result = await _httpClient.PostAsync($"{_apiUrl}/{uri}", content);
             if (!result.IsSuccessStatusCode)
             {
                 var exception = JsonSerializer.Deserialize<ErrorDetails>(await result.Content.ReadAsStringAsync(), new JsonSerializerOptions
@@ -51,20 +46,6 @@ namespace WebBlazor.Services
                     PropertyNameCaseInsensitive = true
                 });
 
-                return null;
-            }
-
-            return await FromHttpResponseMessage<T>(result);
-        }
-
-        public async Task<T> HttpPut<T>(string uri, object dataToSend)
-            where T : class
-        {
-            var content = ToJson(dataToSend);
-
-            var result = await _httpClient.PutAsync($"{_apiUrl}{uri}", content);
-            if (!result.IsSuccessStatusCode)
-            {
                 return null;
             }
 
