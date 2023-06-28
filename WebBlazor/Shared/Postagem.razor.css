@@ -274,3 +274,19 @@ a {
 .footer a:hover {
     color: #ff0000;
 }
+
+.button {
+    border: none;
+    padding: 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+    .button i {
+        margin-right: 5px;
+        color: #ff0000;
+    }
