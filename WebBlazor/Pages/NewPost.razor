@@ -4,16 +4,15 @@
 @inject IJSRuntime JS
 @inject IPostagemService PostagemService
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject NavigationManager NavigationManager
 
 <div class="newpostMainDiv">
-
     <img @ref="previewImageElem" />
     <label for="file-input" class="AddPhoto" style="@StyleForNumber()" hidden="@HideLabel">
         <MudIcon Icon="@Icons.Material.Outlined.CameraAlt" Title="Camera" Style="font-size: 4rem;" />
         Clique para adicionar a Imagem
         <InputFile @ref="inputFile" type="file" OnChange="@ShowPreview" name="my-image" id="file-input" accept="image/jpeg, image/png" style="display:none" />
     </label>
-
     
     <textarea class="legendaInput" @bind="textAreaValue" placeholder="Adicione uma legenda" />
 </div>
@@ -62,6 +61,7 @@
         var postagem = await MontarPostagemDto();
 
         await PostagemService.CreatePostagemAsync(postagem);
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
     private async Task<PostagemDto> MontarPostagemDto()

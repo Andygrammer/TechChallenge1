@@ -1,8 +1,11 @@
-﻿@using WebBlazor.Models;
+﻿@using WebBlazor.Interfaces;
+@using WebBlazor.Models;
 @using static WebBlazor.Pages.Index;
 @using static BaseUrlConfiguration;
 @inherits LayoutComponentBase
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject IPostagemService PostagemService
+@inject NavigationManager NavigationManager
 
 @if (posts == null)
 {
@@ -30,8 +33,8 @@ else
                                 <br>
                             </h3>
                         </div>
-
-
+                        <button class="button">
+                            <i class="fa fa-minus" placehoder="Delete" @onclick="() => DeleteClick(item.Id)"></i></button>
                     </div>
 
                     <div class="imgBx">
@@ -107,5 +110,12 @@ else
     private async Task GetAvatarPhoto()
     {
         PhotoBase64 = await localStorage.GetItemAsync<string>("AvatarPhoto");
+    }
+
+    private async Task DeleteClick(int id)
+    {
+        await PostagemService.DeletePostagemAsync(id);
+
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 }

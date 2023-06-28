@@ -30,5 +30,10 @@ namespace WebBlazor.Services
         {
             return await _httpService.HttpPost<PostagemDto>($"{_url}", postagem);
         }
+
+        public async Task DeletePostagemAsync(int id)
+        {
+            await _httpService.HttpDelete<PostagemDto>($"{_url}", id);
+        }
     }
 }

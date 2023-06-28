@@ -28,16 +28,14 @@ namespace WebBlazor.Services
             return await FromHttpResponseMessage<T>(result);
         }
 
-        public async Task<T> HttpDelete<T>(string uri, int id)
+        public async Task HttpDelete<T>(string uri, int id)
             where T : class
         {
-            var result = await _httpClient.DeleteAsync($"{_apiUrl}{uri}/{id}");
+            var result = await _httpClient.DeleteAsync($"{uri}/{id}");
             if (!result.IsSuccessStatusCode)
             {
-                return null;
             }
 
-            return await FromHttpResponseMessage<T>(result);
         }
 
         public async Task<T> HttpPost<T>(string uri, object dataToSend)
