@@ -1,12 +1,11 @@
 ﻿using Azure.Storage.Blobs;
-using PosgramAPI.Models.Dto;
 
 namespace Api.Services
 {
     public interface IBlobServices
     {
         public Task<string> GetBlob(string imageName);
-        public Task<string> CreateBlob(PostagemDto newPost);
+        public Task<string> CreateBlob(string nomeImagem, string imagemBase64, string nomeAutor);
         public Task DeleteBlob(string imageName);
     }
 
@@ -23,15 +22,15 @@ namespace Api.Services
             containerClient = blobServiceClient.GetBlobContainerClient("sc-postechchallenge1");
         }
 
-        public async Task<string> CreateBlob(PostagemDto newPost)
+        public async Task<string> CreateBlob(string nomeImagem, string imagemBase64, string nomeAutor)
         {
-            var nomeImagem = BuildBlobImagem(newPost);
-            BlobClient blobClient = containerClient.GetBlobClient(nomeImagem);
-            var binaryData = Base64Service.ConvertFromBase64(newPost.Imagem);
+            var tituloImagem = BuildBlobImagem(nomeImagem, nomeAutor);
+            BlobClient blobClient = containerClient.GetBlobClient(tituloImagem);
+            var binaryData = Base64Service.ConvertFromBase64(imagemBase64);
             await blobClient.UploadAsync(binaryData, true);
 
             if (!await blobClient.ExistsAsync()) throw new Exception("Blob was not created");
-            return nomeImagem;
+            return tituloImagem;
         }
 
         public async Task DeleteBlob(string imageName)
@@ -50,10 +49,10 @@ namespace Api.Services
             return base64String;
         }
             
-        private string BuildBlobImagem(PostagemDto newPost)
+        private string BuildBlobImagem(string nomeImagem, string autor)
         {
-            var extensionName = Path.GetExtension(newPost.NomeImagem);
-            var nomeAutor = newPost.Autor.ToLower().Replace(" ", "-");
+            var extensionName = Path.GetExtension(nomeImagem);
+            var nomeAutor = autor.ToLower().Replace(" ", "-");
             return string.Format("{0}_{1}{2}", nomeAutor, Guid.NewGuid().ToString(), extensionName);
         }
     }

@@ -38,11 +38,15 @@ namespace PosgramAPI.Controllers
         {
             if (postagemDto == null) return BadRequest(postagemDto);
 
-            var ulrImagem = await _blobServices.CreateBlob(postagemDto);
-            postagemDto.Imagem = ulrImagem;
+            var ulrImagemPostagem = await _blobServices.CreateBlob(postagemDto.NomeImagem, postagemDto.Imagem, postagemDto.Autor);
+            postagemDto.Imagem = ulrImagemPostagem;
+
+            var ulrImagemPerfil = await _blobServices.CreateBlob("profile.png", postagemDto.ImagemAutor, postagemDto.Autor);
+            postagemDto.ImagemAutor = ulrImagemPerfil;
+
             Postagem modelPostagem = _mapper.Map<Postagem>(postagemDto);
             await _dbPostagem.CreateAsync(modelPostagem);
-            return new CreatedResult(ulrImagem, postagemDto);
+            return new CreatedResult(ulrImagemPostagem, postagemDto);
         }
 
         [HttpDelete("{id:int}")]

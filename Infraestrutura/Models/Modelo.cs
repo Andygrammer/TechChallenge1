@@ -21,6 +21,8 @@ namespace Infraestrutura.Models
         [Required]
         public DateTime DataHora { get; set; }
 
+        public string ImagemAutor { get; set; }
+
         /// <summary>
         /// Construtor
         /// </summary>
@@ -28,20 +30,22 @@ namespace Infraestrutura.Models
         /// <param name="legenda">Legenda do Post</param>
         /// <param name="imagem">Imagem do Post</param>
         /// <param name="dataHora">Data e Hora da Postagem</param>
+        /// /// <param name="imagemAutor">Imagem de perfil do Autor do Post</param>
         public Postagem(string autor, 
                         string legenda, 
                         string imagem,
+                        string imagemAutor,
                         DateTime dataHora)
         {
             Autor = autor;
             Legenda = legenda;
             Imagem = imagem;
             DataHora = dataHora;
+            ImagemAutor = imagemAutor;
         }
 
         public Postagem()
         {
-
         }
     }
 }

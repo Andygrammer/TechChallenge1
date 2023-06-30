@@ -68,6 +68,7 @@
     {
         PostagemDto postagem = new PostagemDto();
         postagem.Autor = await localStorage.GetItemAsync<string>("AvatarName");
+        postagem.NomeImagem = await localStorage.GetItemAsync<string>("AvatarPhoto");
         postagem.Imagem = Photo64;
         postagem.NomeImagem = nameImage;
         postagem.Legenda = textAreaValue;
