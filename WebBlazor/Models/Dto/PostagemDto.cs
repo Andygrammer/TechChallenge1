@@ -12,5 +12,6 @@ namespace WebBlazor.Models
         public string Imagem { get; set; }
         public string NomeImagem { get; set; }
         public DateTime DataHora { get; set; }
+        public string ImagemAutor { get; set; }
     }
 }

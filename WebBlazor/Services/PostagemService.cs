@@ -22,6 +22,7 @@ namespace WebBlazor.Services
             foreach(var item in itemGetTask)
             {
                 item.Imagem = String.Concat(_blobUrl + item.Imagem + _tokenAccess);
+                item.ImagemAutor = String.Concat(_blobUrl + item.ImagemAutor + _tokenAccess);
             }
             return itemGetTask;
         }
