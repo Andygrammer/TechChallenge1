@@ -33,7 +33,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PosgramWasm v1");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PosgramWasm v1 - Dentro de um Container");
 });
 
 // Configure the HTTP request pipeline.
