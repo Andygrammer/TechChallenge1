@@ -16,33 +16,34 @@ jobs:
     build-and-deploy:
         runs-on: ubuntu-latest
         steps:
-        # checkout the repo
-        - name: 'Checkout GitHub Action'
-          uses: actions/checkout@master
-          
-        - name: 'Login via Azure CLI'
-          uses: azure/login@v1
-          with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
-        - name: 'Build and push image'
-          uses: azure/docker-login@v1
-          with:
-            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-            username: ${{ secrets.REGISTRY_USERNAME }}
-            password: ${{ secrets.REGISTRY_PASSWORD }}
-        - run: |
-            docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
-            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
+        - name: Checkout repository
+          uses: actions/checkout@v2
 
-        - name: 'Deploy to Azure Container Instances'
-          uses: 'azure/aci-deploy@v1'
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v1
           with:
-            resource-group: ${{ env.AZURE_RESOURCE_GROUP }}
-            dns-name-label: ${{ env.AZURE_RESOURCE_GROUP }}${{ github.run_number }}
-            image: ${{ env.IMAGE_NAME }}/sampleapp:${{ github.sha }}
-            registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-            registry-username: ${{ secrets.REGISTRY_USERNAME }}
-            registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-            name: aci-sampleapp
-            location: 'brazil south'
+            dotnet-version: '6.0.x'
+
+        - name: Build the .NET application
+          run: dotnet build --configuration Release
+
+        - name: Publish the Docker image to Azure Container Registry
+          run: |
+            docker build -t ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }} .
+            docker login ${{ env.AZURE_CONTAINER_REGISTRY }} -u ${{ secrets.AZURE_ACR_USERNAME }} -p ${{ secrets.AZURE_ACR_PASSWORD }}
+            docker push ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}
+        
+            - name: 'Deploy to Azure Container Instances'
+              uses: 'azure/aci-deploy@v1'
+              with:
+                az container create \
+                resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+                --name ${{ env.CONTAINER_GROUP_NAME }} \
+                --image ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }} \
+                --cpu 1 \
+                --memory 1.5 \
+                --registry-login-server ${{ env.AZURE_CONTAINER_REGISTRY }} \
+                --registry-username ${{ secrets.AZURE_ACR_USERNAME }} \
+                --registry-password ${{ secrets.AZURE_ACR_PASSWORD }} \
+                --dns-name-label ${{ env.CONTAINER_GROUP_NAME }} \
+                --ports 80
