@@ -36,7 +36,7 @@ jobs:
           with:
            resource-group: ${{ env.AZURE_RESOURCE_GROUP }}
            dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
-           image: ${{ env.aspnetimage:v1 }}/sampleapp:${{ github.sha }}
+           image: ${{ env.IMAGE_NAME }}/sampleapp:${{ github.sha }}
            registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
            registry-username: ${{ secrets.REGISTRY_USERNAME }}
            registry-password: ${{ secrets.REGISTRY_PASSWORD }}
