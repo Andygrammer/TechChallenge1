@@ -1,48 +1,50 @@
-name: Compilar e implantar o aplicativo .NET Core no aplicativo Web wa-back-postechchallenge1
+name: .NET 6 Azure Deploy
+
 on:
   push:
     branches:
-    - master
+      - master
+
 env:
-  AZURE_WEBAPP_NAME: wa-back-postechchallenge1
-  AZURE_WEBAPP_PACKAGE_PATH: Api\publish
-  CONFIGURATION: Release
-  DOTNET_CORE_VERSION: 6.0.x
-  WORKING_DIRECTORY: Api
+  AZURE_CONTAINER_REGISTRY: postechchallenge1acr.azurecr.io
+  IMAGE_NAME: aspnetimage:v1
+  AZURE_RESOURCE_GROUP: rg-postechchallenge1
+  AZURE_REGION: brazilsouth
+  CONTAINER_GROUP_NAME: postechchallenge1aci
+
 jobs:
-  build:
-    runs-on: windows-latest
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v3
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
-    - name: Restore
-      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
-    - name: Build
-      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
-    - name: Test
-      run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
-    - name: Publish
-      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-    - name: Publish Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: webapp
-        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-  deploy:
-    runs-on: windows-latest
-    needs: build
-    steps:
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v3
-      with:
-        name: webapp
-        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-    - name: Deploy to Azure WebApp
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.wa_back_postechchallenge1_465B }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        dotnet-version: '6.0.x'
+
+    - name: Build the .NET application
+      run: dotnet build --configuration Release
+
+    - name: Publish the Docker image to Azure Container Registry
+      run: |
+        docker build -t ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }} .
+        docker login ${{ env.AZURE_CONTAINER_REGISTRY }} -u ${{ secrets.AZURE_ACR_USERNAME }} -p ${{ secrets.AZURE_ACR_PASSWORD }}
+        docker push ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}
+        
+        - name: 'Deploy to Azure Container Instances'
+          uses: 'azure/aci-deploy@v1'
+          with:
+            az container create \
+            resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --name ${{ env.CONTAINER_GROUP_NAME }} \
+            --image ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }} \
+            --cpu 1 \
+            --memory 1.5 \
+            --registry-login-server ${{ env.AZURE_CONTAINER_REGISTRY }} \
+            --registry-username ${{ secrets.AZURE_ACR_USERNAME }} \
+            --registry-password ${{ secrets.AZURE_ACR_PASSWORD }} \
+            --dns-name-label ${{ env.CONTAINER_GROUP_NAME }} \
+            --ports 80
